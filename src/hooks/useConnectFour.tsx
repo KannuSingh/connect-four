@@ -1,14 +1,73 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
+import { useApplicationContext } from "../context/ApplicationContext"; // Import the context
 
 const ROWS = 6;
 const COLS = 7;
 
 export const useConnectFour = () => {
-  const [board, setBoard] = useState(Array.from({ length: ROWS }, () => Array(COLS).fill(null)));
+  const { smartSession, setSmartSession } = useApplicationContext();
+  const [board, setBoard] = useState<Array<(string | null)[]>>(Array.from({ length: ROWS }, () => Array(COLS).fill(null)));
   const [currentPlayer, setCurrentPlayer] = useState('Red');
   const [winner, setWinner] = useState<string | null>(null);
   const [winningCells, setWinningCells] = useState<number[][] | null>(null);
   const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (smartSession?.gameInfo?.gameState) {
+      const { gameState } = smartSession.gameInfo;
+      setBoard(gameState.board);
+      setCurrentPlayer(gameState.isXNext ? 'Red' : 'Yellow');
+      setWinner(gameState.winner);
+      setWinningCells(gameState.winningLine);
+    }
+  }, [smartSession]);
+
+  const updateGameState = (newBoard: (string | null)[][], winner: string | null, winningCells: number[][] | null) => {
+    if (smartSession?.gameInfo) {
+      const newGameState = {
+        ...smartSession.gameInfo,
+        gameState: {
+          ...smartSession.gameInfo?.gameState,
+          board: newBoard,
+          winner,
+          winningLine: winningCells,
+        },
+      };
+
+      setSmartSession({
+        ...smartSession,
+        gameInfo: {
+          ...smartSession.gameInfo,
+          gameState: newGameState.gameState,
+        },
+      });
+    }
+  };
+
+  const startGame = () => {
+    const newBoard = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+    setBoard(newBoard);
+    setCurrentPlayer('Red');
+    setWinner(null);
+    setWinningCells(null);
+
+    if (smartSession) {
+      setSmartSession({
+        ...smartSession,
+        gameInfo: {
+          ...smartSession.gameInfo,
+          gameStarted: true,
+          gameState: {
+            board: newBoard,
+            winner: null,
+            winningLine: null,
+            isXNext: false,
+            gameId: null
+          },
+        },
+      });
+    }
+  };
 
   const dropToken = (col: number) => {
     if (winner) return;
@@ -19,23 +78,25 @@ export const useConnectFour = () => {
         newBoard[row][col] = currentPlayer;
         setBoard(newBoard);
 
-        if (checkWinner(newBoard, row, col)) {
+        const winning = checkWinner(newBoard, row, col);
+        if (winning) {
           setWinner(currentPlayer);
+          updateGameState(newBoard, currentPlayer, winning);
         } else {
           setCurrentPlayer(currentPlayer === 'Red' ? 'Yellow' : 'Red');
+          updateGameState(newBoard, null, null);
         }
-
         break;
       }
     }
   };
 
-  const checkWinner = (board: string[][], row: number, col: number) => {
+  const checkWinner = (board: (string | null)[][], row: number, col: number) => {
     const directions = [
-      { x: 0, y: 1 },   // Horizontal
-      { x: 1, y: 0 },   // Vertical
-      { x: 1, y: 1 },   // Diagonal down-right
-      { x: 1, y: -1 },  // Diagonal down-left
+      { x: 0, y: 1 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+      { x: 1, y: -1 },
     ];
 
     for (const direction of directions) {
@@ -47,21 +108,21 @@ export const useConnectFour = () => {
 
       if (winningLine.length >= 4) {
         setWinningCells(winningLine);
-        return true;
+        return winningLine;
       }
     }
 
-    return false;
+    return null;
   };
 
   const collectTokens = (
-    board: string[][],
+    board: (string | null)[][],
     row: number,
     col: number,
     dx: number,
     dy: number
   ) => {
-    const cells = [];
+    const cells: number[][] = [];
     let currentRow = row + dy;
     let currentCol = col + dx;
 
@@ -81,11 +142,16 @@ export const useConnectFour = () => {
   };
 
   const resetGame = () => {
-    setBoard(Array.from({ length: ROWS }, () => Array(COLS).fill(null)));
+    const newBoard = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+    setBoard(newBoard);
     setCurrentPlayer('Red');
     setWinner(null);
     setWinningCells(null);
     setHoveredColumn(null);
+
+    if (smartSession) {
+      updateGameState(newBoard, null, null);
+    }
   };
 
   const getHoverRow = (col: number) => {
@@ -107,5 +173,6 @@ export const useConnectFour = () => {
     hoveredColumn,
     setHoveredColumn,
     getHoverRow,
+    startGame,
   };
 };

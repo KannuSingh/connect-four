@@ -1,6 +1,6 @@
 'use client'
+import { ConnectFour } from '@/components/ConnectFour';
 import Head from 'next/head';
-import ConnectFour from '../components/ui/ConnectFour/ConnectFour';
 
 const Home = () => {
   return (
