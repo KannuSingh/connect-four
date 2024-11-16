@@ -1,16 +1,12 @@
-import { encodeFunctionData, parseEther } from "viem";
 import { ConnectFourAbi } from "./ConnectFourAbi";
 import {
-  createPublicClient,
   createWalletClient,
-  decodeEventLog,
   http,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { baseSepolia } from "viem/chains";
 import {
   SmartSessionGrantPermissionsRequest,
-  SmartSessionGrantPermissionsResponse,
 } from "@reown/appkit-experimental/smart-session";
 
 const connectFourAddress = "0xbdBd16D07Fe58458A99CB1C3183e65Ad30026A91";
