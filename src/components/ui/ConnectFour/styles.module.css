@@ -1,0 +1,213 @@
+/* Connect Four container styles */
+.connectFourContainer {
+  text-align: center;
+  background-color: #f0f8ff; /* Light background */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: auto;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.currentPlayer {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.currentPlayer span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.currentPlayer .red {
+  background: radial-gradient(circle at 30% 30%, #ff6666, #cc0000);
+}
+
+.currentPlayer .yellow {
+  background: radial-gradient(circle at 30% 30%, #ffff66, #cccc00);
+}
+
+.winner {
+  font-size: 1.2rem;
+}
+
+/* Board styling */
+.board {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(40px, 1fr));
+  gap: 5px;
+  margin: auto;
+  background: linear-gradient(45deg, #deb887, #d2a679), 
+              url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+  background-size: cover;
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+}
+
+/* Basic cell styles */
+.cell {
+  width: 100%;
+  height: auto;
+  padding-top: 100%;
+  background-color: lightgray;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Red and yellow token styles */
+.cell.red {
+  background: radial-gradient(circle at 30% 30%, #ff6666, #cc0000);
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.cell.yellow {
+  background: radial-gradient(circle at 30% 30%, #ffff66, #cccc00);
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Drop animation for tokens */
+.cell.dropping {
+  animation: dropBounce 0.7s ease-out;
+}
+
+@keyframes dropBounce {
+  0% {
+    transform: translateY(-200%);
+  }
+  70% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(-10%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Highlight winning cells */
+.winningCell {
+  box-shadow: 0 0 15px 5px rgba(255, 255, 0, 0.8); /* Default yellow glow */
+  animation: pulse 1.5s infinite;
+}
+
+.winningCell.red {
+  box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.8); /* Red winner glow */
+}
+
+.winningCell.yellow {
+  box-shadow: 0 0 15px 5px rgba(255, 255, 0, 0.8); /* Yellow winner glow */
+}
+
+/* Pulse animations for winning cells */
+@keyframes pulseRed {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px red, 0 0 40px red, 0 0 60px red;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red;
+  }
+}
+
+@keyframes pulseYellow {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px yellow, 0 0 40px yellow, 0 0 60px yellow;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow;
+  }
+}
+
+
+/* Reset button styling */
+.resetButton {
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 20px;
+}
+
+.resetButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover effect only for the preview cell */
+.cellHover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Preview hover effect (applies to the preview cell) */
+.hoverPreview {
+  background-color: rgba(0, 0, 0, 0.1); /* Subtle preview */
+  border: 2px dashed rgba(0, 0, 0, 0.2); /* Dashed border */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Glow for emphasis */
+  transition: all 0.2s ease;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem; /* Smaller title on mobile */
+  }
+
+  .currentPlayer,
+  .winner {
+    font-size: 1.2rem; /* Smaller text on mobile */
+  }
+
+  .board {
+    grid-template-columns: repeat(7, minmax(40px, 1fr)); /* Adjust column size for smaller screens */
+  }
+
+  .cell {
+    padding-top: calc(100% - (10px)); /* Adjust padding for smaller screens to maintain aspect ratio */
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem; /* Even smaller title on very small screens */
+  }
+
+  .currentPlayer,
+  .winner {
+    font-size: 1rem; /* Smaller text on very small screens */
+  }
+
+  .board {
+    grid-template-columns: repeat(7, minmax(30px, 1fr)); /* Further adjust column size for very small screens */
+  }
+
+  .cell {
+    padding-top: calc(100% - (5px)); /* Further adjust padding for very small screens to maintain aspect ratio */
+  }
+}
