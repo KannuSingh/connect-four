@@ -1,6 +1,12 @@
 export const ConnectFourAbi = [
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_systemPlayer",
+				"type": "address"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
@@ -17,6 +23,12 @@ export const ConnectFourAbi = [
 				"indexed": true,
 				"internalType": "address",
 				"name": "player1",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "player2",
 				"type": "address"
 			}
 		],
@@ -67,6 +79,12 @@ export const ConnectFourAbi = [
 			{
 				"indexed": false,
 				"internalType": "uint8",
+				"name": "row",
+				"type": "uint8"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint8",
 				"name": "column",
 				"type": "uint8"
 			},
@@ -81,7 +99,13 @@ export const ConnectFourAbi = [
 		"type": "event"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_player2",
+				"type": "address"
+			}
+		],
 		"name": "createGame",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -121,8 +145,13 @@ export const ConnectFourAbi = [
 				"type": "address"
 			},
 			{
-				"internalType": "enum ConnectFour.Player",
+				"internalType": "address",
 				"name": "currentPlayer",
+				"type": "address"
+			},
+			{
+				"internalType": "enum ConnectFour.Player",
+				"name": "currentPlayerColor",
 				"type": "uint8"
 			},
 			{
@@ -132,19 +161,6 @@ export const ConnectFourAbi = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "gameId",
-				"type": "uint256"
-			}
-		],
-		"name": "joinGame",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -176,6 +192,19 @@ export const ConnectFourAbi = [
 		"name": "resetGame",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "systemPlayer",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	}
 ] as const;
